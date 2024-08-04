@@ -1,4 +1,5 @@
-﻿using ManagmentApp.Models;
+﻿using ManagmentApp.Dtos;
+using ManagmentApp.Models;
 using ManagmentApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,10 +26,10 @@ namespace ManagmentApp.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult> Create(Employee newEmployee)
+        [HttpPost]  
+        public async Task<ActionResult> Create([FromBody]CreateEmployeeDto dto) 
         {
-            await _employeeService.CreateEmployee(newEmployee);
+            await _employeeService.CreateEmployee(dto);
 
             return NoContent();
         }

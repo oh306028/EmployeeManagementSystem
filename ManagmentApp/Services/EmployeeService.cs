@@ -1,4 +1,6 @@
-﻿using ManagmentApp.Models;
+﻿using AutoMapper;
+using ManagmentApp.Dtos;
+using ManagmentApp.Models;
 using ManagmentApp.Repositories;
 
 namespace ManagmentApp.Services
@@ -6,17 +8,19 @@ namespace ManagmentApp.Services
     public interface IEmployeeService
     {
         Task<IEnumerable<Employee>> GetAllEmployeesAsync();
-        Task CreateEmployee(Employee emp);
+        Task CreateEmployee(CreateEmployeeDto dto); 
     }
 
     public class EmployeeService : IEmployeeService 
     {
         private readonly EmployeeRepo _employeeRepo;
+        private readonly IMapper _mapper;
 
-        public EmployeeService(EmployeeRepo employeeRepo)
+        public EmployeeService(EmployeeRepo employeeRepo, IMapper mapper)
         {
             _employeeRepo = employeeRepo;
-        }
+            _mapper = mapper;
+        }   
 
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
@@ -26,9 +30,13 @@ namespace ManagmentApp.Services
             return employees;
         }
 
-        public async Task CreateEmployee(Employee emp)
+        public async Task CreateEmployee(CreateEmployeeDto dto)
         {
-            await _employeeRepo.CreateAsync(emp);
+
+            var mappedEmploye = _mapper.Map<Employee>(dto);
+
+            mappedEmploye.HireDate = DateTime.Now;
+            await _employeeRepo.CreateAsync(mappedEmploye);
         }
     }
 }
