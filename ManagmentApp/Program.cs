@@ -1,5 +1,6 @@
 using ManagmentApp.DbStorage;
 using ManagmentApp.Repositories;
+using ManagmentApp.Services;
 
 namespace ManagmentApp
 {
@@ -18,7 +19,11 @@ namespace ManagmentApp
 
             builder.Services.Configure<EmployeeSystemSettings>( 
               builder.Configuration.GetSection("MongoDB"));
+
             builder.Services.AddSingleton<EmployeeRepo>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             var app = builder.Build();
 
