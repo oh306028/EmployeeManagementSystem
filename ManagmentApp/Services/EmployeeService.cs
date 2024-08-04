@@ -6,6 +6,7 @@ namespace ManagmentApp.Services
     public interface IEmployeeService
     {
         Task<IEnumerable<Employee>> GetAllEmployeesAsync();
+        Task CreateEmployee(Employee emp);
     }
 
     public class EmployeeService : IEmployeeService 
@@ -23,6 +24,11 @@ namespace ManagmentApp.Services
             var employees = await _employeeRepo.GetAllAsync();  
 
             return employees;
+        }
+
+        public async Task CreateEmployee(Employee emp)
+        {
+            await _employeeRepo.CreateAsync(emp);
         }
     }
 }
