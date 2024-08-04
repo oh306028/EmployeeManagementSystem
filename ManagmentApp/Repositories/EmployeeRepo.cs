@@ -20,9 +20,9 @@ namespace ManagmentApp.Repositories
             _employeeCollection = mongoDatabase.GetCollection<Employee>(COLLECTION_NAME);
              
         }
-        public async Task<List<Employee>> GetAsync() =>
+        public async Task<List<Employee>> GetAllAsync() =>
         await _employeeCollection.Find(_ => true).ToListAsync();
-
+            
         public async Task<Employee?> GetAsync(string id) =>
             await _employeeCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
