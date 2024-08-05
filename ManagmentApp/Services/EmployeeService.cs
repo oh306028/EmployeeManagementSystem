@@ -2,6 +2,7 @@
 using ManagmentApp.Dtos;
 using ManagmentApp.Models;
 using ManagmentApp.Repositories;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace ManagmentApp.Services
@@ -9,8 +10,10 @@ namespace ManagmentApp.Services
     public interface IEmployeeService
     {
         Task<IEnumerable<Employee>> GetAllEmployeesAsync();
-        Task CreateEmployee(CreateEmployeeDto dto); 
-    }
+        Task CreateEmployee(CreateEmployeeDto dto);
+        Task<List<EmployeeWithDetails>> GetDetails();
+
+     }  
 
     public class EmployeeService : IEmployeeService 
     {
@@ -25,11 +28,19 @@ namespace ManagmentApp.Services
         
         }       
 
+        public async Task<List<EmployeeWithDetails>> GetDetails()
+        {
+            var results = await _employeeRepo.GetEmployeeWithCompensation();
+
+            return results; 
+        }
+
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()           
         {
 
-            var employees = await _employeeRepo.GetAllAsync();  
+            var employees = await _employeeRepo.GetAllAsync();
+
 
             return employees;
         }
