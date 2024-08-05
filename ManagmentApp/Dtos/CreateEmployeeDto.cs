@@ -9,6 +9,9 @@ namespace ManagmentApp.Dtos
         [Required]
         public string LastName { get; set; }
         [Required]
-        public string Email { get; set; }   
+        public string Email { get; set; }
+
+        [Required]       
+        public string DepartamentName { get; set; } 
     }
 }
