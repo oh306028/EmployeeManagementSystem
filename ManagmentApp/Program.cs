@@ -21,9 +21,14 @@ namespace ManagmentApp
               builder.Configuration.GetSection("MongoDB"));
 
             builder.Services.AddSingleton<EmployeeRepo>();
+            builder.Services.AddSingleton<DepartamentRepo>();
+    
+
+
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddScoped<IDepartamentService, DepartamentService>();  
 
             var app = builder.Build();
 
