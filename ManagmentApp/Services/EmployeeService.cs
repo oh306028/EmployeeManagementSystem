@@ -2,6 +2,7 @@
 using ManagmentApp.Dtos;
 using ManagmentApp.Models;
 using ManagmentApp.Repositories;
+using MongoDB.Driver;
 
 namespace ManagmentApp.Services
 {
@@ -15,16 +16,19 @@ namespace ManagmentApp.Services
     {
         private readonly EmployeeRepo _employeeRepo;
         private readonly IMapper _mapper;
+      
 
         public EmployeeService(EmployeeRepo employeeRepo, IMapper mapper)
         {
             _employeeRepo = employeeRepo;
             _mapper = mapper;
-        }   
+        
+        }       
 
 
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
+        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()           
         {
+
             var employees = await _employeeRepo.GetAllAsync();  
 
             return employees;
