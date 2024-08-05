@@ -24,14 +24,14 @@ namespace ManagmentApp.Controllers
             
         }
 
-        [HttpGet("employees")]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetDepartmentsWithEmployees([FromQuery]string departamentName)
-        {
+     //   [HttpGet("employees")]
+     //   public async Task<ActionResult<IEnumerable<Employee>>> GetDepartmentsWithEmployees([FromQuery]string departamentName)
+      //  {
            
-            var results = await _employeeRepository.GetEmployeesByDepartament(departamentName);
+         //   var results = await _employeeRepository.GetEmployeesByDepartament(departamentName);
  
-            return Ok(results);
-        }
+        //    return Ok(results);
+      //  }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Departament>>> GetDepartments()      

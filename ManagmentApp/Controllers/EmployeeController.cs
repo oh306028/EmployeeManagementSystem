@@ -2,6 +2,7 @@
 using ManagmentApp.Models;
 using ManagmentApp.Services;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace ManagmentApp.Controllers
 {
@@ -33,7 +34,15 @@ namespace ManagmentApp.Controllers
 
             return NoContent();
         }
-            
+
+
+        [HttpGet("details")]
+        public async Task<ActionResult<List<EmployeeWithDetails>>> GetEmpWithDetails()
+        {
+            var results = await _employeeService.GetDetails();
+
+            return Ok(results); 
+        }
 
     }
 
