@@ -1,4 +1,6 @@
-﻿using ManagmentApp.Models;
+﻿using AutoMapper;
+using ManagmentApp.Dtos;
+using ManagmentApp.Models;
 using ManagmentApp.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +11,14 @@ namespace ManagmentApp.Controllers
     public class DepartamentController : ControllerBase
     {
         private readonly DepartamentRepo _departamentRepository;
-        private readonly EmployeeRepo _employeeRepository;  
+        private readonly EmployeeRepo _employeeRepository;
+        private readonly IMapper _mapper;
 
-        public DepartamentController(DepartamentRepo departamentRepository, EmployeeRepo employeeRepository)
+        public DepartamentController(DepartamentRepo departamentRepository, EmployeeRepo employeeRepository, IMapper mapper)
         {
             _departamentRepository = departamentRepository;
-            _employeeRepository = employeeRepository;   
+            _employeeRepository = employeeRepository;
+            _mapper = mapper;
         }
 
         [HttpGet("employees")]
@@ -33,6 +37,17 @@ namespace ManagmentApp.Controllers
             var results = await _departamentRepository.GetAllAsync();  
 
             return Ok(results);
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> CreateDepartament([FromBody] CreateDepartamentDto dto)
+        {
+            var result = _mapper.Map<Departament>(dto);
+
+            await _departamentRepository.CreateAsync(result);
+
+            return Created("api/departaments",null);
         }
 
 
