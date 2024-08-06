@@ -67,42 +67,46 @@ namespace ManagmentApp.Repositories
         }
 
 
-        public async Task<List<EmployeeWithDetails>> GetEmployeeWithCompensation() 
+        public async Task<List<EmployeeWithDetails>> GetEmployeeWithCompensation()
         {
-                var pipeline = new[]    
+            var pipeline = new[]
             {
-                    new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "Compensations" },
-                    { "localField", "_id" },
-                    { "foreignField", "EmployeeId" },
-                    { "as", "CompensationDetails" }
-                }),
-                new BsonDocument("$unwind", "$CompensationDetails"),
-                new BsonDocument("$lookup", new BsonDocument
-                {
-                    { "from", "Departaments" },
-                    { "localField", "DepartamentId" },
-                    { "foreignField", "_id" },
-                    { "as", "DepartamentDetails" }
-                }),
-                new BsonDocument("$unwind", "$DepartamentDetails"),
-                new BsonDocument("$project", new BsonDocument
-                {
-                    { "Id", "$_id" },
-                    { "FirstName", "$FirstName" },
-                    { "LastName", "$LastName" },
-                    { "HireDate", "$HireDate" },
-                    { "DepartamentName", "$DepartamentDetails.Name" },
-                    { "Email", "$Email" },
-                    { "SalaryPerMonth", "$CompensationDetails.SalaryPerMonth" },
-                    { "BonusPerMonth", "$CompensationDetails.BonusPerMonth" }
-                })
-            };
+        new BsonDocument("$lookup", new BsonDocument
+        {
+            { "from", "Compensations" },
+            { "localField", "_id" },
+            { "foreignField", "EmployeeId" },
+            { "as", "CompensationDetails" }
+        }),
+        new BsonDocument("$unwind", new BsonDocument
+        {
+            { "path", "$CompensationDetails" },
+            { "preserveNullAndEmptyArrays", true }
+        }),
+        new BsonDocument("$lookup", new BsonDocument
+        {
+            { "from", "Departaments" },
+            { "localField", "DepartamentId" },
+            { "foreignField", "_id" },
+            { "as", "DepartamentDetails" }
+        }),
+        new BsonDocument("$unwind", "$DepartamentDetails"),
+        new BsonDocument("$project", new BsonDocument
+        {
+            { "Id", "$_id" },
+            { "FirstName", "$FirstName" },
+            { "LastName", "$LastName" },
+            { "HireDate", "$HireDate" },
+            { "DepartamentName", "$DepartamentDetails.Name" },
+            { "Email", "$Email" },
+            { "SalaryPerMonth", new BsonDocument("$ifNull", new BsonArray { "$CompensationDetails.SalaryPerMonth", BsonNull.Value }) },
+            { "BonusPerMonth", new BsonDocument("$ifNull", new BsonArray { "$CompensationDetails.BonusPerMonth", BsonNull.Value }) }
+        })
+    };
 
-             var results = await _employeeCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();   
+            var results = await _employeeCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
 
-            var employeesWithCompensation = new List<EmployeeWithDetails>();   
+            var employeesWithCompensation = new List<EmployeeWithDetails>();
 
             foreach (var result in results)
             {
@@ -114,15 +118,14 @@ namespace ManagmentApp.Repositories
                     HireDate = result["HireDate"].ToUniversalTime(),
                     DepartamentName = result["DepartamentName"].AsString,
                     Email = result["Email"].AsString,
-                    SalaryPerMonth = result["SalaryPerMonth"].ToDouble(),
-                    BonusPerMonth = result["BonusPerMonth"].ToDouble(),
-                    
+                    SalaryPerMonth = result["SalaryPerMonth"].IsBsonNull ? (double?)null : result["SalaryPerMonth"].ToDouble(),
+                    BonusPerMonth = result["BonusPerMonth"].IsBsonNull ? (double?)null : result["BonusPerMonth"].ToDouble(),
                 });
             }
 
             return employeesWithCompensation;
-
         }
+
 
 
 

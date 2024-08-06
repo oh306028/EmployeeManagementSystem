@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ManagmentApp.Dtos;
+using ManagmentApp.Exceptions;
 using ManagmentApp.Models;
 using ManagmentApp.Repositories;
 using MongoDB.Bson;
@@ -20,13 +21,13 @@ namespace ManagmentApp.Services
     {
         private readonly EmployeeRepo _employeeRepo;
         private readonly IMapper _mapper;
-      
+        private readonly DepartamentRepo _departamentRepo;
 
-        public EmployeeService(EmployeeRepo employeeRepo, IMapper mapper)
+        public EmployeeService(EmployeeRepo employeeRepo, IMapper mapper, DepartamentRepo departamentRepo)
         {
             _employeeRepo = employeeRepo;
             _mapper = mapper;
-        
+            _departamentRepo = departamentRepo;
         }       
 
         public async Task<List<EmployeeWithDetails>> GetDetails()
@@ -54,9 +55,15 @@ namespace ManagmentApp.Services
         public async Task CreateEmployee(CreateEmployeeDto dto)
         {
 
-            var mappedEmploye = _mapper.Map<Employee>(dto);
+            var mappedEmploye = _mapper.Map<Employee>(dto);       
+            var departament = await _departamentRepo.GetByNameAsync(dto.DepartamentName);
 
+            if (departament is null)
+                throw new NotFoundException("Cannot find that departament");
+
+            mappedEmploye.DepartamentId = departament.Id;
             mappedEmploye.HireDate = DateTime.Now;
+
             await _employeeRepo.CreateAsync(mappedEmploye);
         }
     }
