@@ -23,6 +23,7 @@ namespace ManagmentApp
 
             builder.Services.AddSingleton<EmployeeRepo>();
             builder.Services.AddSingleton<DepartamentRepo>();
+            builder.Services.AddSingleton<CompensationRepo>();
 
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();  
 
@@ -30,6 +31,7 @@ namespace ManagmentApp
 
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IDepartamentService, DepartamentService>();  
+            builder.Services.AddScoped<ICompensationService, CompensationService>();        
 
             var app = builder.Build();
 
