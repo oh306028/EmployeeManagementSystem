@@ -19,11 +19,11 @@ namespace ManagmentApp.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetAll()
+        public async Task<ActionResult<string>> GetAll()
         {
             var emloyees = await _employeeService.GetAllEmployeesAsync();
 
-            return Ok(emloyees);
+            return Ok(emloyees);            
         }
 
 
