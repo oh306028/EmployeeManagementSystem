@@ -23,7 +23,7 @@ namespace ManagmentApp.Repositories
         }
         public async Task<List<Employee>> GetAllAsync() =>
         await _employeeCollection.Find(_ => true).ToListAsync();
-            
+               
         public async Task<Employee?> GetAsync(string id) =>
             await _employeeCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
@@ -35,6 +35,36 @@ namespace ManagmentApp.Repositories
 
         public async Task RemoveAsync(string id) =>
             await _employeeCollection.DeleteOneAsync(x => x.Id == id);
+
+
+        public async Task<List<BsonDocument>> GetEmployeeWithDepartaments()
+        {
+                
+            var pipeline = new []
+            {
+                new BsonDocument("$lookup",
+                new BsonDocument
+                    {
+                        { "from", "Departaments" },
+                        { "localField", "DepartamentId" },
+                        { "foreignField", "_id" },
+                        { "as", "DepartamentDetails" }
+                    }),
+                new BsonDocument("$project",
+                new BsonDocument
+                    {
+                        { "FirstName", 1 },
+                        { "LastName", 1 },
+                        { "Email", 1 },
+                        { "HireDate", 1 },
+                        { "DepartamentDetails", 1 }
+                    })
+            };
+
+           var result =  await _employeeCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
+                
+            return result;      
+        }
 
 
         public async Task<List<EmployeeWithDetails>> GetEmployeeWithCompensation() 

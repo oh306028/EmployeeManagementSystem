@@ -3,17 +3,18 @@ using ManagmentApp.Dtos;
 using ManagmentApp.Models;
 using ManagmentApp.Repositories;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using MongoDB.Driver;
 
 namespace ManagmentApp.Services
 {
     public interface IEmployeeService
     {
-        Task<IEnumerable<Employee>> GetAllEmployeesAsync();
+        Task<string> GetAllEmployeesAsync();     
         Task CreateEmployee(CreateEmployeeDto dto);
         Task<List<EmployeeWithDetails>> GetDetails();
-
-     }  
+            
+     }      
 
     public class EmployeeService : IEmployeeService 
     {
@@ -36,14 +37,19 @@ namespace ManagmentApp.Services
         }
 
 
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()           
+        public async Task<string> GetAllEmployeesAsync()
         {
+            var employees = await _employeeRepo.GetEmployeeWithDepartaments();
 
-            var employees = await _employeeRepo.GetAllAsync();
+            // var dotNetObjList = employees.ConvertAll(BsonTypeMapper.MapToDotNetValue);
 
+            var settings = new JsonWriterSettings { Indent = true };
+            var jsonDocuments = employees.Select(e => e.ToJson(settings)).ToList();
+            var jsonArray = "[" + string.Join(",", jsonDocuments) + "]";
 
-            return employees;
+            return jsonArray;
         }
+
 
         public async Task CreateEmployee(CreateEmployeeDto dto)
         {
