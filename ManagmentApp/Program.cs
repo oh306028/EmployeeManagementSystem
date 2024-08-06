@@ -1,4 +1,5 @@
 using ManagmentApp.DbStorage;
+using ManagmentApp.Middlewares;
 using ManagmentApp.Repositories;
 using ManagmentApp.Services;
 
@@ -22,8 +23,8 @@ namespace ManagmentApp
 
             builder.Services.AddSingleton<EmployeeRepo>();
             builder.Services.AddSingleton<DepartamentRepo>();
-    
 
+            builder.Services.AddScoped<ExceptionHandlingMiddleware>();  
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -39,10 +40,12 @@ namespace ManagmentApp
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<ExceptionHandlingMiddleware>();
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+          
 
             app.MapControllers();
 
