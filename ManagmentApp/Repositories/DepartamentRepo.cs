@@ -30,6 +30,9 @@ namespace ManagmentApp.Repositories
         public async Task<Departament?> GetAsync(string id) =>
             await _departamentCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+        public async Task<Departament?> GetByNameAsync(string name) =>       
+          await _departamentCollection.Find(x => x.Name.ToLower() == name.ToLower()).FirstOrDefaultAsync();   
+
         public async Task CreateAsync(Departament newDepartament) =>
             await _departamentCollection.InsertOneAsync(newDepartament);   
 
@@ -38,6 +41,8 @@ namespace ManagmentApp.Repositories
             
         public async Task RemoveAsync(string id) =>
             await _departamentCollection.DeleteOneAsync(x => x.Id == id);   
+
+
 
         public async Task<List<DepartamentDto>> GetEmployeesForEachDepartament()
         {
