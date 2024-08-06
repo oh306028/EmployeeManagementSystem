@@ -14,6 +14,6 @@ namespace ManagmentApp.Models
         public string Email { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        public string DepartamentId { get; set; }   
+        public string DepartmentId { get; set; }   
     }
 }

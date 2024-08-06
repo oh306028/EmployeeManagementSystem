@@ -18,14 +18,6 @@ namespace ManagmentApp.Controllers
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult<string>> GetAll()
-        {
-            var emloyees = await _employeeService.GetAllEmployeesAsync();
-
-            return Ok(emloyees);            
-        }
-
 
         [HttpPost]  
         public async Task<ActionResult> Create([FromBody]CreateEmployeeDto dto) 
@@ -36,7 +28,7 @@ namespace ManagmentApp.Controllers
         }
 
 
-        [HttpGet("details")]
+        [HttpGet()]
         public async Task<ActionResult<List<EmployeeWithDetails>>> GetEmpWithDetails()
         {
             var results = await _employeeService.GetDetails();

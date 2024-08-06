@@ -9,7 +9,8 @@ namespace ManagmentApp
         public AutoMapper()
         {
             CreateMap<CreateEmployeeDto, Employee>();
-            CreateMap<CreateDepartamentDto, Departament>();
+            CreateMap<CreateDepartmentDto, Department>();
+
         }
     }
 }

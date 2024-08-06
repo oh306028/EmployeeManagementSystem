@@ -7,12 +7,12 @@ using MongoDB.Driver;
 
 namespace ManagmentApp.Repositories
 {
-    public class DepartamentRepo
+    public class DepartmentRepo
     {
         private readonly IMongoCollection<Employee> _employeeCollection;
-        private readonly IMongoCollection<Departament> _departamentCollection;  
-        private const string COLLECTION_NAME = "Departaments";  
-        public DepartamentRepo(IOptions<EmployeeSystemSettings> options)
+        private readonly IMongoCollection<Department> _DepartmentCollection;  
+        private const string COLLECTION_NAME = "Departments";  
+        public DepartmentRepo(IOptions<EmployeeSystemSettings> options)
         {   
             var mongoClient = new MongoClient(
             options.Value.ConnectionString);
@@ -21,40 +21,40 @@ namespace ManagmentApp.Repositories
                 options.Value.DataBaseName);
 
             _employeeCollection = mongoDatabase.GetCollection<Employee>("Employees");       
-            _departamentCollection = mongoDatabase.GetCollection<Departament>(COLLECTION_NAME);
+            _DepartmentCollection = mongoDatabase.GetCollection<Department>(COLLECTION_NAME);
 
         }
-        public async Task<List<Departament>> GetAllAsync() =>
-        await _departamentCollection.Find(_ => true).ToListAsync();
+        public async Task<List<Department>> GetAllAsync() =>
+        await _DepartmentCollection.Find(_ => true).ToListAsync();
 
-        public async Task<Departament?> GetAsync(string id) =>
-            await _departamentCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task<Department?> GetAsync(string id) =>
+            await _DepartmentCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-        public async Task<Departament?> GetByNameAsync(string name) =>       
-          await _departamentCollection.Find(x => x.Name.ToLower() == name.ToLower()).FirstOrDefaultAsync();   
+        public async Task<Department?> GetByNameAsync(string name) =>       
+          await _DepartmentCollection.Find(x => x.Name.ToLower() == name.ToLower()).FirstOrDefaultAsync();   
 
-        public async Task CreateAsync(Departament newDepartament) =>
-            await _departamentCollection.InsertOneAsync(newDepartament);   
+        public async Task CreateAsync(Department newDepartment) =>
+            await _DepartmentCollection.InsertOneAsync(newDepartment);   
 
-        public async Task UpdateAsync(string id, Departament updateDepartament) =>  
-            await _departamentCollection.ReplaceOneAsync(x => x.Id == id, updateDepartament);
+        public async Task UpdateAsync(string id, Department updateDepartment) =>  
+            await _DepartmentCollection.ReplaceOneAsync(x => x.Id == id, updateDepartment);
             
         public async Task RemoveAsync(string id) =>
-            await _departamentCollection.DeleteOneAsync(x => x.Id == id);   
+            await _DepartmentCollection.DeleteOneAsync(x => x.Id == id);   
 
 
 
-        public async Task<List<DepartamentDto>> GetEmployeesForEachDepartament()
+        public async Task<List<DepartmentDto>> GetEmployeesForEachDepartment()
         {
-            var departmentsBson = await _departamentCollection.Find(_ => true).ToListAsync();
+            var departmentsBson = await _DepartmentCollection.Find(_ => true).ToListAsync();
             var employeesBson = await _employeeCollection.Find(_ => true).ToListAsync();
 
-            var departmentsDto = departmentsBson.Select(d => new DepartamentDto
+            var departmentsDto = departmentsBson.Select(d => new DepartmentDto
             {
                 Id = d.Id.ToString(),
                 Name = d.Name.ToString(),
                 Employees = employeesBson
-                    .Where(e => e.DepartamentId.ToString() == d.Id.ToString())
+                    .Where(e => e.DepartmentId.ToString() == d.Id.ToString())
                     .Select(e => new EmployeeDto
                     {
                         FirstName = e.FirstName,

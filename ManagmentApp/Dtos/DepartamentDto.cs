@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace ManagmentApp.Dtos
 {
-    public class DepartamentDto
+    public class DepartmentDto
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }

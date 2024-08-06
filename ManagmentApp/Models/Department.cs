@@ -3,7 +3,7 @@ using MongoDB.Bson;
 
 namespace ManagmentApp.Models
 {
-    public class Departament
+    public class Department
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]

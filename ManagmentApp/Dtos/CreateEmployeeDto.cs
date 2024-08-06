@@ -12,6 +12,6 @@ namespace ManagmentApp.Dtos
         public string Email { get; set; }
 
         [Required]       
-        public string DepartamentName { get; set; } 
+        public string DepartmentName { get; set; } 
     }
 }

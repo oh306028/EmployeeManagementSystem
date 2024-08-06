@@ -1,6 +1,6 @@
 ﻿namespace ManagmentApp.Dtos
 {
-    public class CreateDepartamentDto
+    public class CreateDepartmentDto
     {
         public string Name { get; set; }    
     }

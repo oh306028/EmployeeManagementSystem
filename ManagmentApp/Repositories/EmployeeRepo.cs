@@ -37,35 +37,6 @@ namespace ManagmentApp.Repositories
             await _employeeCollection.DeleteOneAsync(x => x.Id == id);
 
 
-        public async Task<List<BsonDocument>> GetEmployeeWithDepartaments()
-        {
-                
-            var pipeline = new []
-            {
-                new BsonDocument("$lookup",
-                new BsonDocument
-                    {
-                        { "from", "Departaments" },
-                        { "localField", "DepartamentId" },
-                        { "foreignField", "_id" },
-                        { "as", "DepartamentDetails" }
-                    }),
-                new BsonDocument("$project",
-                new BsonDocument
-                    {
-                        { "FirstName", 1 },
-                        { "LastName", 1 },
-                        { "Email", 1 },
-                        { "HireDate", 1 },
-                        { "Departament", "$DepartamentDetails.Name" }
-                    })
-            };
-
-           var result =  await _employeeCollection.Aggregate<BsonDocument>(pipeline).ToListAsync();
-                
-            return result;      
-        }
-
 
         public async Task<List<EmployeeWithDetails>> GetEmployeeWithCompensation()
         {
@@ -85,19 +56,19 @@ namespace ManagmentApp.Repositories
         }),
         new BsonDocument("$lookup", new BsonDocument
         {
-            { "from", "Departaments" },
-            { "localField", "DepartamentId" },
+            { "from", "Departments" },
+            { "localField", "DepartmentId" },
             { "foreignField", "_id" },
-            { "as", "DepartamentDetails" }
+            { "as", "DepartmentDetails" }
         }),
-        new BsonDocument("$unwind", "$DepartamentDetails"),
+        new BsonDocument("$unwind", "$DepartmentDetails"),
         new BsonDocument("$project", new BsonDocument
         {
             { "Id", "$_id" },
             { "FirstName", "$FirstName" },
             { "LastName", "$LastName" },
             { "HireDate", "$HireDate" },
-            { "DepartamentName", "$DepartamentDetails.Name" },
+            { "DepartmentName", "$DepartmentDetails.Name" },
             { "Email", "$Email" },
             { "SalaryPerMonth", new BsonDocument("$ifNull", new BsonArray { "$CompensationDetails.SalaryPerMonth", BsonNull.Value }) },
             { "BonusPerMonth", new BsonDocument("$ifNull", new BsonArray { "$CompensationDetails.BonusPerMonth", BsonNull.Value }) }
@@ -116,7 +87,7 @@ namespace ManagmentApp.Repositories
                     FirstName = result["FirstName"].AsString,
                     LastName = result["LastName"].AsString,
                     HireDate = result["HireDate"].ToUniversalTime(),
-                    DepartamentName = result["DepartamentName"].AsString,
+                    DepartmentName = result["DepartmentName"].AsString,
                     Email = result["Email"].AsString,
                     SalaryPerMonth = result["SalaryPerMonth"].IsBsonNull ? (double?)null : result["SalaryPerMonth"].ToDouble(),
                     BonusPerMonth = result["BonusPerMonth"].IsBsonNull ? (double?)null : result["BonusPerMonth"].ToDouble(),

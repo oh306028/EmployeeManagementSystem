@@ -22,7 +22,7 @@ namespace ManagmentApp
               builder.Configuration.GetSection("MongoDB"));
 
             builder.Services.AddSingleton<EmployeeRepo>();
-            builder.Services.AddSingleton<DepartamentRepo>();
+            builder.Services.AddSingleton<DepartmentRepo>();
             builder.Services.AddSingleton<CompensationRepo>();
 
             builder.Services.AddScoped<ExceptionHandlingMiddleware>();  
@@ -30,7 +30,7 @@ namespace ManagmentApp
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-            builder.Services.AddScoped<IDepartamentService, DepartamentService>();  
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>();  
             builder.Services.AddScoped<ICompensationService, CompensationService>();        
 
             var app = builder.Build();
