@@ -57,7 +57,7 @@ namespace ManagmentApp.Repositories
                         { "LastName", 1 },
                         { "Email", 1 },
                         { "HireDate", 1 },
-                        { "DepartamentDetails", 1 }
+                        { "Departament", "$DepartamentDetails.Name" }
                     })
             };
 
