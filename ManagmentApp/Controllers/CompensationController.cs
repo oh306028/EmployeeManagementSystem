@@ -27,18 +27,20 @@ namespace ManagmentApp.Controllers
         //IMPLEMENT METHODS BELOW
         //!!!!
 
-        //IMPLEMENT 
-        //IMPLEMENT 
+        
+        [HttpGet("{employeeName}/salaries")]    
+        public async Task<ActionResult<IEnumerable<Compensation>>> GetSalary([FromRoute] string employeeName)
+        {
+            var result = await _compensationService.GetEmployeeSalary(employeeName);
+
+            return Ok(result);
+        }
+
+
+         //IMPLEMENT 
+         //IMPLEMENT 
 
         /*
-        [HttpGet("{employeeName}/salaries")]    
-        public ActionResult<IEnumerable<Compensation>> GetSalary([FromRoute] string employeeName)
-        {
-
-        }
-         //IMPLEMENT 
-         //IMPLEMENT 
-
         [HttpPost("{employeeName}/salaries")]
         public ActionResult<IEnumerable<Compensation>> CreateSalary([FromRoute] string employeeName)
         {   
