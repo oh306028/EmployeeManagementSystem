@@ -1,4 +1,5 @@
-﻿using ManagmentApp.Models;
+﻿using ManagmentApp.Dtos;
+using ManagmentApp.Models;
 using ManagmentApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,10 +24,6 @@ namespace ManagmentApp.Controllers
             return Ok(result);
         }
 
-        //TO DO:
-        //IMPLEMENT METHODS BELOW
-        //!!!!
-
         
         [HttpGet("{employeeName}/salaries")]    
         public async Task<ActionResult<IEnumerable<Compensation>>> GetSalary([FromRoute] string employeeName)
@@ -36,18 +33,17 @@ namespace ManagmentApp.Controllers
             return Ok(result);
         }
 
-
-         //IMPLEMENT 
-         //IMPLEMENT 
-
-        /*
+        
         [HttpPost("{employeeName}/salaries")]
-        public ActionResult<IEnumerable<Compensation>> CreateSalary([FromRoute] string employeeName)
-        {   
+        public ActionResult<IEnumerable<Compensation>> CreateSalary([FromRoute] string employeeName, [FromBody] CreateCompensationDto dto)
+        {
+            _compensationService.CreateCompensation(employeeName, dto);
+
+            return Created("api/employees/salaries", null);
+
 
         }
-        */
-
+        
 
     }
 }

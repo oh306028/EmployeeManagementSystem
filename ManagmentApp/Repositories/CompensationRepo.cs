@@ -33,9 +33,9 @@ namespace ManagmentApp.Repositories
 
                 return result;
             } 
-                
 
-            public async Task CreateAsync(Compensation newSalary) =>    
+
+            public async Task CreateAsync(Compensation newSalary) =>   
                 await _compensationCollection.InsertOneAsync(newSalary);    
 
             public async Task UpdateAsync(string id, Compensation updateSalary) =>
