@@ -10,6 +10,7 @@ namespace ManagmentApp
         {
             CreateMap<CreateEmployeeDto, Employee>();
             CreateMap<CreateDepartmentDto, Department>();
+            CreateMap<CreateCompensationDto, Compensation>();   
 
         }
     }
